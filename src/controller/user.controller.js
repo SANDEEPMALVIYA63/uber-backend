@@ -154,4 +154,44 @@ const handleUserLogin = asyncHandler(async (req, res) => {
     );
 });
 
-export { handleUserRagister, handleUserLogin };
+const handleUserLogout = asyncHandler(async (req, res) => {
+  await userModel.findOneAndReplace(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "user logout successFully "));
+});
+
+const handleUserProfile = asyncHandler(async (req, res) => {
+  const user = req.user;
+  console.log("user ", user);
+  if (!user) {
+    throw new ApiError(400, "somthing went wrong when get a user profile");
+  }
+
+  res.status(200).json(new ApiResponse(200, user, "user profile get "));
+});
+
+export {
+  handleUserRagister,
+  handleUserLogin,
+  handleUserLogout,
+  handleUserProfile,
+};

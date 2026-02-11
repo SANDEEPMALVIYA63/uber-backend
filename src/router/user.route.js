@@ -2,12 +2,15 @@ import express from "express";
 import {
   handleUserRagister,
   handleUserLogin,
+  handleUserLogout,
+  handleUserProfile,
 } from "./../controller/user.controller.js";
+import { authUser } from "../middleware/authMiddleware..js";
 const router = express.Router();
 import { body } from "express-validator";
 
 router
-  .route("/userRagister", [
+  .route("/Ragister", [
     body("email").isEmail().withMessage("please provide a valid email"),
 
     body("password")
@@ -21,10 +24,12 @@ router
   .post(handleUserRagister);
 
 router
-  .route("/userLogin", [
+  .route("/Login", [
     body("email").isEmail().withMessage("email is requred"),
     body("password").isLength({ min: 2 }).withMessage("password is requred "),
   ])
   .post(handleUserLogin);
 
+router.route("/Logout").post(authUser, handleUserLogout);
+router.route("/Profile").post(authUser, handleUserProfile);
 export default router;

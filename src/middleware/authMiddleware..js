@@ -11,6 +11,7 @@ const authUser = async (req, _, next) => {
     if (!token) {
       throw new ApiError(401, " unauthorization user and token was not found");
     }
+
     const decodeToken = await jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET,
@@ -18,7 +19,7 @@ const authUser = async (req, _, next) => {
 
     const user = await userModel
       .findById(decodeToken._id)
-      .select("-password - refreshToken");
+      .select("-password -refreshToken");
 
     if (!user) {
       throw new ApiError(404, "user not found");
