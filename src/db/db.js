@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const DbCannect = async () => {
+const DbConnect = async () => {
   try {
-    const DbName = process.env.DBName 
-    const url = process.env.MONGODB_URL 
+    const DbName = process.env.DBName
+    const url = process.env.MONGODB_URL
     //|| "mongodb://localhost:27017";
 
     const MongoURl = `${url}/${DbName}`;
@@ -15,4 +15,4 @@ const DbCannect = async () => {
   }
 };
 
-export default DbCannect;
+export default DbConnect;

@@ -1,16 +1,16 @@
 import express from "express";
 import {
-  handleUserRagister,
+  handleUserRegister,
   handleUserLogin,
   handleUserLogout,
   handleUserProfile,
 } from "./../controller/user.controller.js";
-import { authUser } from "../middleware/authMiddleware..js";
+import { authUser } from "../middleware/authMiddleware.js";
 const router = express.Router();
 import { body } from "express-validator";
 
 router
-  .route("/Ragister", [
+  .route("/register", [
     body("email").isEmail().withMessage("please provide a valid email"),
 
     body("password")
@@ -21,15 +21,15 @@ router
       .isLength({ min: 3 })
       .withMessage("name is at least 3 character "),
   ])
-  .post(handleUserRagister);
+  .post(handleUserRegister);
 
 router
-  .route("/Login", [
+  .route("/login", [
     body("email").isEmail().withMessage("email is requred"),
     body("password").isLength({ min: 2 }).withMessage("password is requred "),
   ])
   .post(handleUserLogin);
 
-router.route("/Logout").post(authUser, handleUserLogout);
-router.route("/Profile").post(authUser, handleUserProfile);
+router.route("/logout").post(authUser, handleUserLogout);
+router.route("/profile").post(authUser, handleUserProfile);
 export default router;

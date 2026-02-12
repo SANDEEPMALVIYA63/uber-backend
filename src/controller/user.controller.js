@@ -28,7 +28,7 @@ const generateAcccessTokenAndRefresToken = async (id) => {
   }
 };
 
-const handleUserRagister = asyncHandler(async (req, res) => {
+const handleUserRegister = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   // console.log(errors);
 
@@ -58,8 +58,7 @@ const handleUserRagister = asyncHandler(async (req, res) => {
     password,
   });
 
-  console.log("service ke bad user ", user);
-  console.log("Id ", user._id);
+
 
   if (!user) {
     throw new ApiError(400, "Somthing went wrong when ragister  user ");
@@ -119,7 +118,7 @@ const handleUserLogin = asyncHandler(async (req, res) => {
     throw new ApiError(400, "user is not  found ");
   }
 
-  if (!user.email == email) {
+  if (user.email !== email) {
     throw new ApiError(400, "email is not valid");
   }
 
@@ -140,7 +139,7 @@ const handleUserLogin = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-  console.log("accessToken, refreshToken ", accessToken, refreshToken);
+
   return res
     .status(200)
     .cookie("refreshToken", refreshToken, options)
@@ -155,7 +154,7 @@ const handleUserLogin = asyncHandler(async (req, res) => {
 });
 
 const handleUserLogout = asyncHandler(async (req, res) => {
-  await userModel.findOneAndReplace(
+  await userModel.findByIdAndUpdate(
     req.user._id,
     {
       $unset: {
@@ -190,7 +189,7 @@ const handleUserProfile = asyncHandler(async (req, res) => {
 });
 
 export {
-  handleUserRagister,
+  handleUserRegister,
   handleUserLogin,
   handleUserLogout,
   handleUserProfile,
